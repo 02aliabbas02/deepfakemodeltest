@@ -1,5 +1,5 @@
-# import ssl
-# ssl._create_default_https_context = ssl._create_unverified_context
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 import torch
 from torch.utils.model_zoo import load_url
@@ -18,13 +18,13 @@ def main():
     face_size = 224
     
      # Model Loading
-    # model_url = weights.weight_url['{:s}_{:s}'.format(net_model, train_db)]
+  # model_url = weights.weight_url['{:s}_{:s}'.format(net_model, train_db)]
     net = getattr(fornet, net_model)().eval().to(device)
-    # net.load_state_dict(load_url(model_url, map_location=device, check_hash=True))
+   # net.load_state_dict(load_url(model_url, map_location=device, check_hash=True))
     net.load_state_dict(torch.load("/Users/akhtarabbas/Downloads/models/DeepFakeDetector-copy/flaskAPIForPrediction/icpr2020dfdc/Xception_DFDC.pth", map_location=device))
   
     # Load Images
-    im_real = Image.open('test_images/real/real00240.jpg')
+    im_real = Image.open('test_images/real/real.png').convert('RGB')
     im_fake = Image.open('test_images/df/fake.png').convert('RGB')
 
     # Face Extraction

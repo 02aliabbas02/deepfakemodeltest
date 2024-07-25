@@ -1,28 +1,20 @@
 import os
 import logging
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from icpr_model import ICPRModel
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Instantiate your ICPR model
+# Instantiate the ICPR model
 model = ICPRModel()
 
-def make_prediction(image_file):
-    try:
-        # Make prediction using ICPR model
-        prediction = model.predict(image_file)
-        return prediction
-    except Exception as e:
-        return {"error": str(e)}
-
-@app.route('/predict_icpr', methods=['POST'])
-def predict_icpr():
+@app.route('/predict', methods=['POST'])
+def predict():
     app.logger.info('Predict endpoint called')
     if 'file' not in request.files:
         app.logger.error('No file part in the request')
@@ -36,9 +28,9 @@ def predict_icpr():
         return jsonify({"error": "No selected file"}), 400
     
     try:
-        prediction = make_prediction(file)
+        prediction = model.predict(file)
         app.logger.info(f'Prediction: {prediction}')
-        return jsonify({"prediction": prediction})
+        return jsonify(prediction)
     
     except Exception as e:
         app.logger.error(f'Error during prediction: {str(e)}')
